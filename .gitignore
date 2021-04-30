@@ -1,0 +1,11 @@
+
+android/
+ios/
+web/
+web/
+**/*.lock
+**/*.packages
+**/*.metadata
+
+.dart_tool/
+.idea/
