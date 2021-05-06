@@ -54,64 +54,71 @@ class _NewTransactionState extends State<NewTransaction> {
       });
     }
 
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            TextField(
-              controller: _titleController,
-              decoration: InputDecoration(labelText: 'Titulo'),
-              onSubmitted: (_) => _submitTransaction(),
-            ),
-            TextField(
-              controller: _amountController,
-              decoration: InputDecoration(labelText: 'Valor'),
-              keyboardType: TextInputType.number,
-              onSubmitted: (_) => _submitTransaction(),
-            ),
-            Container(
-              height: 70,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      _selectedDate == null
-                          ? 'Data não escolhida'
-                          : 'Data selecionada: ${DateFormat.yMd().format(_selectedDate!)}',
-                    ),
-                  ),
-                  TextButton(
-                    child: Text(
-                      'Selecione uma data',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.bold,
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: 10,
+            left: 10,
+            right: 10,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(labelText: 'Titulo'),
+                onSubmitted: (_) => _submitTransaction(),
+              ),
+              TextField(
+                controller: _amountController,
+                decoration: InputDecoration(labelText: 'Valor'),
+                keyboardType: TextInputType.number,
+                onSubmitted: (_) => _submitTransaction(),
+              ),
+              Container(
+                height: 70,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _selectedDate == null
+                            ? 'Data não escolhida'
+                            : 'Data selecionada: ${DateFormat.yMd().format(_selectedDate!)}',
                       ),
                     ),
-                    onPressed: _showDatePicker,
+                    TextButton(
+                      child: Text(
+                        'Selecione uma data',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: _showDatePicker,
+                    ),
+                  ],
+                ),
+              ),
+              TextButton(
+                onPressed: _submitTransaction,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    Theme.of(context).primaryColor,
                   ),
-                ],
-              ),
-            ),
-            TextButton(
-              onPressed: _submitTransaction,
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-                  Theme.of(context).primaryColor,
                 ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: const Text(
-                  "Adicionar transação",
-                  style: TextStyle(color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Text(
+                    "Adicionar transação",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

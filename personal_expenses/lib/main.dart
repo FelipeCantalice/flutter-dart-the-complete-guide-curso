@@ -105,6 +105,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
+    bool _showChart = false;
     final appBar = AppBar(
       title: Text(
         "Personal expenses",
@@ -118,29 +122,53 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () => _showModelAddTransaction(context))
       ],
     );
+
+    final _transactionList = Container(
+      height: (MediaQuery.of(context).size.height -
+              appBar.preferredSize.height -
+              MediaQuery.of(context).padding.top) *
+          0.7,
+      child: TransactionList(
+        transactions: _transactions,
+        deleteTransaction: _deleteTransaction,
+      ),
+    );
+
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height -
-                      MediaQuery.of(context).padding.top) *
-                  0.3,
-              child: Chart(recentTransactions: _recentTransactions),
-            ),
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height -
-                      MediaQuery.of(context).padding.top) *
-                  0.7,
-              child: TransactionList(
-                transactions: _transactions,
-                deleteTransaction: _deleteTransaction,
+            if (isLandscape)
+              Row(
+                children: [
+                  Text("Monstrar grafico"),
+                  Switch(
+                    value: _showChart,
+                    onChanged: (v) => _showChart = v,
+                  ),
+                ],
               ),
-            ),
+            if (!isLandscape)
+              Container(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.3,
+                child: Chart(recentTransactions: _recentTransactions),
+              ),
+            if (!isLandscape) _transactionList,
+            if (isLandscape)
+              _showChart
+                  ? Container(
+                      height: (MediaQuery.of(context).size.height -
+                              appBar.preferredSize.height -
+                              MediaQuery.of(context).padding.top) *
+                          0.7,
+                      child: Chart(recentTransactions: _recentTransactions),
+                    )
+                  : _transactionList,
           ],
         ),
       ),
