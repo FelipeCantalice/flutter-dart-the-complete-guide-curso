@@ -59,6 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
     Transaction(id: 'd2', title: 'Doce', amount: 12.90, data: DateTime.now()),
   ];
 
+  bool _showChart = false;
+
   List<Transaction> get _recentTransactions {
     return _transactions
         .where(
@@ -105,10 +107,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    final mediaQuery = MediaQuery.of(context);
 
-    bool _showChart = false;
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
+
+    final isBigScreen = mediaQuery.size.width > 600;
+
     final appBar = AppBar(
       title: Text(
         "Personal expenses",
@@ -124,9 +128,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     final _transactionList = Container(
-      height: (MediaQuery.of(context).size.height -
+      height: (mediaQuery.size.height -
               appBar.preferredSize.height -
-              MediaQuery.of(context).padding.top) *
+              mediaQuery.padding.top) *
           0.7,
       child: TransactionList(
         transactions: _transactions,
@@ -134,48 +138,57 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
 
+    Widget _showContainer(double heightContainer) {
+      return Container(
+        height: (mediaQuery.size.height -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top) *
+            heightContainer,
+        child: Chart(
+          recentTransactions: _recentTransactions,
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (isLandscape)
+            // verificar se a tela está em modo landscape
+            if (isLandscape) ...{
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("Monstrar grafico"),
                   Switch(
                     value: _showChart,
-                    onChanged: (v) => _showChart = v,
+                    onChanged: (v) {
+                      setState(() {
+                        _showChart = v;
+                      });
+                    },
                   ),
                 ],
               ),
-            if (!isLandscape)
-              Container(
-                height: (MediaQuery.of(context).size.height -
-                        appBar.preferredSize.height -
-                        MediaQuery.of(context).padding.top) *
-                    0.3,
-                child: Chart(recentTransactions: _recentTransactions),
-              ),
-            if (!isLandscape) _transactionList,
-            if (isLandscape)
-              _showChart
-                  ? Container(
-                      height: (MediaQuery.of(context).size.height -
-                              appBar.preferredSize.height -
-                              MediaQuery.of(context).padding.top) *
-                          0.7,
-                      child: Chart(recentTransactions: _recentTransactions),
-                    )
-                  : _transactionList,
+              // verificar o estado do Switch
+              _showChart ? _showContainer(0.7) : Container(),
+              _transactionList
+            },
+            // se não
+            if (!isLandscape) ...{
+              _showContainer(0.3),
+              _transactionList,
+            },
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         child: IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _showModelAddTransaction(context)),
+          icon: Icon(Icons.add),
+          onPressed: () => _showModelAddTransaction(context),
+        ),
         onPressed: () {},
       ),
     );
