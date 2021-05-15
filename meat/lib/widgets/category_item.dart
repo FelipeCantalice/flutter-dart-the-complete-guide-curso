@@ -14,10 +14,9 @@ class CategoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void _selectCategory() {
-      print(category.toMap());
       Navigator.of(context).pushNamed(
         CategoryMealsScreen.routeName,
-        arguments: category.toMap(),
+        arguments: category.id,
       );
     }
 
@@ -29,7 +28,7 @@ class CategoryItem extends StatelessWidget {
         padding: const EdgeInsets.all(15),
         child: Text(
           category.title,
-          style: Theme.of(context).textTheme.title,
+          style: Theme.of(context).textTheme.headline1,
         ),
         decoration: BoxDecoration(
           gradient: LinearGradient(

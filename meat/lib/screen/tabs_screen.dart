@@ -31,7 +31,7 @@ class _TabsWidgetState extends State<TabsWidget> {
       initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Meals"),
+          title: Text("Refeições"),
         ),
         drawer: MainDrawerWidget(),
         body: _pages[_selectedPageIndex],

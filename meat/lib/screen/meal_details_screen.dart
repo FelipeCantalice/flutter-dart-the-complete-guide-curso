@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meet/models/category_dumy.dart';
+import 'package:meet/provider/home_provider.dart';
+import 'package:provider/provider.dart';
 
 class MealDetailsScreen extends StatelessWidget {
   static const routeName = '/meals-details';
@@ -8,9 +9,17 @@ class MealDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final mealId = ModalRoute.of(context)?.settings.arguments as String;
 
-    final selectedMeal = DUMMY_MEALS.firstWhere(
+    if (mealId.isEmpty) Navigator.of(context).pop();
+
+    var provider = Provider.of<HomeProvider>(context, listen: true);
+
+    final selectedMeal = provider.avaliableMeals.firstWhere(
       (meal) => meal.id == mealId,
     );
+
+    void _addToFavorites() {
+      provider.addFavorite(mealId);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -62,7 +71,7 @@ class MealDetailsScreen extends StatelessWidget {
                         ),
                         title: Text(steps),
                       ),
-                      Divider(),
+                      const Divider(),
                     ],
                   );
                 },
@@ -72,10 +81,10 @@ class MealDetailsScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.delete),
-        onPressed: () {
-          Navigator.of(context).pop(mealId);
-        },
+        child: Icon(
+          provider.isFavorite(mealId) ? Icons.favorite : Icons.favorite_outline,
+        ),
+        onPressed: _addToFavorites,
       ),
     );
   }
@@ -103,7 +112,7 @@ class MealDetailsScreen extends StatelessWidget {
       ),
       child: Text(
         title,
-        style: Theme.of(context).textTheme.title,
+        style: Theme.of(context).textTheme.headline1,
       ),
     );
   }

@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'category.dart';
 import 'meal.dart';
 
+// ignore: non_constant_identifier_names
 final DUMMY_CATEGORIES = [
   Category(
     id: 'c1',
-    title: 'Italian',
+    title: 'Italiana',
     color: Colors.purple,
   ),
   Category(
     id: 'c2',
-    title: 'Quick & Easy',
+    title: 'Rápido e fácil',
     color: Colors.red,
   ),
   Category(
@@ -21,41 +22,42 @@ final DUMMY_CATEGORIES = [
   ),
   Category(
     id: 'c4',
-    title: 'German',
+    title: 'Alemã',
     color: Colors.amber,
   ),
   Category(
     id: 'c5',
-    title: 'Light & Lovely',
+    title: 'Leve e adorável',
     color: Colors.blue,
   ),
   Category(
     id: 'c6',
-    title: 'Exotic',
+    title: 'Exótica',
     color: Colors.green,
   ),
   Category(
     id: 'c7',
-    title: 'Breakfast',
+    title: 'Café da manhã',
     color: Colors.lightBlue,
   ),
   Category(
     id: 'c8',
-    title: 'Asian',
+    title: 'Asiática',
     color: Colors.lightGreen,
   ),
   Category(
     id: 'c9',
-    title: 'French',
+    title: 'Francesa',
     color: Colors.pink,
   ),
   Category(
     id: 'c10',
-    title: 'Summer',
+    title: 'Verão',
     color: Colors.teal,
   ),
 ];
 
+// ignore: non_constant_identifier_names
 final List<Meal> DUMMY_MEALS = [
   Meal(
     id: 'm1',

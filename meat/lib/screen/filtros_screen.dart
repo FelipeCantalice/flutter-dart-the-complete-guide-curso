@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:meet/presentation/meals_filter_enum.dart';
+import 'package:meet/provider/home_provider.dart';
 import 'package:meet/widgets/main_drawer.dart';
+import 'package:provider/provider.dart';
 
 class FiltrosScreen extends StatefulWidget {
   static const routeName = '/filtros';
@@ -9,13 +12,16 @@ class FiltrosScreen extends StatefulWidget {
 }
 
 class _FiltrosScreenState extends State<FiltrosScreen> {
-  bool _isGlutenFree = false;
-  bool _isVegetarianFree = false;
-  bool _isVegan = false;
-  bool _isLactoseFree = false;
+  Function(MealsType type, bool isActive)? filter;
 
   @override
   Widget build(BuildContext context) {
+    var homeProvider = Provider.of<HomeProvider>(context, listen: true);
+
+    Map<MealsType, bool> filters = homeProvider.filters;
+
+    filter = homeProvider.setFilters;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Filtros"),
@@ -26,7 +32,7 @@ class _FiltrosScreenState extends State<FiltrosScreen> {
           Container(
             child: Text(
               'Ajuste a seleção',
-              style: Theme.of(context).textTheme.title,
+              style: Theme.of(context).textTheme.headline1,
             ),
           ),
           Expanded(
@@ -34,38 +40,30 @@ class _FiltrosScreenState extends State<FiltrosScreen> {
               children: [
                 _buildSwitchListTile(
                   "Livre de gluten",
-                  _isGlutenFree,
+                  filters[MealsType.GLUTEN] ?? false,
                   (val) {
-                    setState(() {
-                      _isGlutenFree = val;
-                    });
+                    filter?.call(MealsType.GLUTEN, val);
                   },
                 ),
                 _buildSwitchListTile(
                   "Livre de lactose",
-                  _isLactoseFree,
+                  filters[MealsType.LACTOSE] ?? false,
                   (val) {
-                    setState(() {
-                      _isLactoseFree = val;
-                    });
+                    filter?.call(MealsType.LACTOSE, val);
                   },
                 ),
                 _buildSwitchListTile(
-                  "Vegatarioano",
-                  _isVegetarianFree,
+                  "Vegetariano",
+                  filters[MealsType.VEGETARIAN] ?? false,
                   (val) {
-                    setState(() {
-                      _isVegetarianFree = val;
-                    });
+                    filter?.call(MealsType.VEGETARIAN, val);
                   },
                 ),
                 _buildSwitchListTile(
                   "Vegano",
-                  _isVegan,
+                  filters[MealsType.VEGAN] ?? false,
                   (val) {
-                    setState(() {
-                      _isVegan = val;
-                    });
+                    filter?.call(MealsType.VEGAN, val);
                   },
                 ),
               ],
@@ -77,9 +75,12 @@ class _FiltrosScreenState extends State<FiltrosScreen> {
   }
 
   SwitchListTile _buildSwitchListTile(
-      String title, bool currentValue, Function(bool) onChanged) {
+    String title,
+    bool currentValue,
+    Function(bool) onChanged,
+  ) {
     return SwitchListTile(
-      title: Text("Livre de gluten"),
+      title: Text(title),
       value: currentValue,
       onChanged: onChanged,
     );
