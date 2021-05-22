@@ -61,7 +61,7 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sh0pZ"),
+        title: Text("Sh0pping APP"),
         actions: [
           PopupMenuButton(
             icon: Icon(Icons.more_vert),
