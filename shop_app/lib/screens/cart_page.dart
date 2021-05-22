@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/models/cart_item.dart';
 import 'package:shop_app/providers/cart_provider.dart';
+import 'package:shop_app/providers/order_provider.dart';
 import 'package:shop_app/widgets/cart_item.dart';
 
 class CartPage extends StatelessWidget {
@@ -20,6 +21,12 @@ class CartPage extends StatelessWidget {
             return CartItemWidget(item: it);
           },
         );
+
+    void _finishOrder() {
+      final orderProvider = Provider.of<OrderProvider>(context);
+      final products = provider.items;
+      orderProvider.addOrders(products.values.toList());
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -52,7 +59,7 @@ class CartPage extends StatelessWidget {
                   ),
                   SizedBox(width: 10),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: _finishOrder,
                     child: FittedBox(
                       child: Text(
                         "PEDIR AGORA!",
