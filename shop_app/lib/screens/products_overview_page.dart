@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/providers/cart_provider.dart';
 import 'package:shop_app/providers/products_provider.dart';
+import 'package:shop_app/screens/cart_page.dart';
+import 'package:shop_app/widgets/badge.dart';
 import 'package:shop_app/widgets/product_item.dart';
 
 enum FilterProductOptions {
@@ -53,6 +56,9 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
       });
     }
 
+    void _navigateToCartPage() =>
+        Navigator.of(context).pushNamed(CartPage.routeName);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Sh0pZ"),
@@ -70,7 +76,19 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
                 value: FilterProductOptions.ALL,
               ),
             ],
-          )
+          ),
+          Consumer<CartProvider>(
+            builder: (_, cart, __) {
+              return Badge(
+                child: IconButton(
+                  icon: Icon(Icons.shopping_cart),
+                  onPressed: _navigateToCartPage,
+                ),
+                value: cart.itemsCount.toString(),
+                color: Theme.of(context).accentColor,
+              );
+            },
+          ),
         ],
       ),
       body: _gridViewBuilder(),
